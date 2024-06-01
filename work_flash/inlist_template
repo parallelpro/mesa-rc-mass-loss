@@ -127,6 +127,8 @@
       profiles_index_name = 'profiles.index' !change this
       profile_interval = 5
       max_num_profile_models = 18000
+      add_double_points_to_pulse_data = .true.
+      keep_surface_point_for_pulse_data = .true.
 
    !# when to stop
 
@@ -156,6 +158,7 @@
       nu_max_sun = 3090d0
       delta_nu_sun = 135.1d0
       astero_Teff_sun = 5772d0
+      delta_Pg_mode_freq = 1d-99
 
       !# Brunt controls
 
@@ -179,7 +182,7 @@
       ! use_dedt_form_of_energy_eqn = .true.
       energy_eqn_option = 'dedt'
 
-      varcontrol_target = 1d-3 !1d-3 in 1M_to_wd test suite !1d-4
+      varcontrol_target = 1d-4 !1d-3 in 1M_to_wd test suite !1d-4
       mesh_delta_coeff = 1.0
 
       
