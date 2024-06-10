@@ -146,10 +146,10 @@
       ! these are evolutionary step controls
       ! for seismic step controls see src/run_star_extras.f90
       delta_lgTeff_hard_limit = 0.001
-      delta_lgL_limit_L_min = 0.0
-      delta_lgL_hard_limit = 0.004
-      delta_XH_cntr_hard_limit = 0.003d0
-      delta_XHe_cntr_hard_limit = 0.003d0
+      delta_lgL_limit_L_min = 0.01
+      delta_lgL_hard_limit = 0.006
+      delta_XH_cntr_hard_limit = 0.005d0
+      delta_XHe_cntr_hard_limit = 0.005d0
 
 
    !# asteroseismology controls
@@ -158,7 +158,7 @@
       nu_max_sun = 3090d0
       delta_nu_sun = 135.1d0
       astero_Teff_sun = 5772d0
-      delta_Pg_mode_freq = 1d-99
+      delta_Pg_mode_freq = 1
 
       !# Brunt controls
 
