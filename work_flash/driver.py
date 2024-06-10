@@ -111,7 +111,7 @@ for ip, p in params.loc[idx,:].iterrows():
 
 
         # #  write out the table
-        with h5py.File(f"index{p['index']:06.0f}.history.h5", 'w') as h5f:
+        with h5py.File(f"index{p['index']:06.0f}.history_flash.h5", 'w') as h5f:
             for col in track.columns:
                 h5f.create_dataset(col, data=track[col].to_numpy())
 
