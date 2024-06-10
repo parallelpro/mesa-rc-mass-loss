@@ -326,19 +326,25 @@
          ! use a custom frequency, save 50 profiles per 1 dex in Dnu, 
          ! or 0.2 profiles per 1K in Teff, or 50 profiles per 1dex in log10(L/Lsun)
          ! d(N_m)/d(log10(Dnu)) = d(N_m)/d(N_p) * d(N_p)/d(log10(Dnu)) = gyre_interval * 200/1dex
-         ! d(N_m)/d(Teff) = d(N_m)/d(N_p) * d(N_p)/d(Teff) = gyre_interval * 0.1/1K
+         ! d(N_m)/d(Teff) = d(N_m)/d(N_p) * d(N_p)/d(Teff) = gyre_interval * 5/1000K
          ! d(N_m)/d(log10(L)) = d(N_m)/d(N_p) * d(N_p)/d(log10(L)) = gyre_interval * 100/1dex
          s%xtra(1) = log10(s%delta_nu)
          s%xtra(2) = s%Teff
          s%xtra(3) = log10(s%L_phot)
          s%xtra(4) = s%center_h1 
          s%xtra(5) = s%center_he4
-         s%xtra(6) = max( min(int( 1./abs(s%xtra(1)-s%xtra_old(1)) / 100. ), &
-                              int( 1./abs(s%xtra(2)-s%xtra_old(2)) / 0.003 ), &
-                              int( 1./abs(s%xtra(3)-s%xtra_old(3)) / 100. ), &
-                              int( 1./abs(s%xtra(4)-s%xtra_old(4)) / 200. ), &
-                              int( 1./abs(s%xtra(5)-s%xtra_old(5)) / 200. ) ) &
-                        , 1) ! gyre_interval
+         if (s%center_h1 > 0.001) then 
+            s%xtra(6) = max( min(int( 1./abs(s%xtra(1)-s%xtra_old(1)) / 100. ), &
+                                 int( 1./abs(s%xtra(2)-s%xtra_old(2)) / 0.005 ), &
+                                 int( 1./abs(s%xtra(3)-s%xtra_old(3)) / 100. ), &
+                                 int( 1./abs(s%xtra(4)-s%xtra_old(4)) / 200. ) ) &
+                           , 1) ! gyre_interval
+         else 
+            s%xtra(6) = max( min(int( 1./abs(s%xtra(1)-s%xtra_old(1)) / 100. ), &
+                                 int( 1./abs(s%xtra(2)-s%xtra_old(2)) / 0.005 ), &
+                                 int( 1./abs(s%xtra(3)-s%xtra_old(3)) / 100. ) ) &
+                           , 1) ! gyre_interval
+         endif
 
          if (flag_gyre) then
             ! print *, 'Modifying xtra(5) ', flag_gyre

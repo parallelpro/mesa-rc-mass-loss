@@ -333,12 +333,18 @@
          s%xtra(3) = log10(s%L_phot)
          s%xtra(4) = s%center_h1 
          s%xtra(5) = s%center_he4
-         s%xtra(6) = max( min(int( 1./abs(s%xtra(1)-s%xtra_old(1)) / 100. ), &
-                              int( 1./abs(s%xtra(2)-s%xtra_old(2)) / 0.003 ), &
-                              int( 1./abs(s%xtra(3)-s%xtra_old(3)) / 100. ), &
-                              int( 1./abs(s%xtra(4)-s%xtra_old(4)) / 200. ), &
-                              int( 1./abs(s%xtra(5)-s%xtra_old(5)) / 200. ) ) &
-                        , 1) ! gyre_interval
+         if ((s%center_he4 > 0.001) .and. (s%center_h1 < 0.001)) then 
+            s%xtra(6) = max( min(int( 1./abs(s%xtra(1)-s%xtra_old(1)) / 100. ), &
+                                 int( 1./abs(s%xtra(2)-s%xtra_old(2)) / 0.005 ), &
+                                 int( 1./abs(s%xtra(3)-s%xtra_old(3)) / 100. ), &
+                                 int( 1./abs(s%xtra(5)-s%xtra_old(5)) / 200. ) ) &
+                           , 1) ! gyre_interval
+         else 
+            s%xtra(6) = max( min(int( 1./abs(s%xtra(1)-s%xtra_old(1)) / 100. ), &
+                                 int( 1./abs(s%xtra(2)-s%xtra_old(2)) / 0.005 ), &
+                                 int( 1./abs(s%xtra(3)-s%xtra_old(3)) / 100. ) ) &
+                           , 1) ! gyre_interval
+         endif
 
          if (flag_gyre) then
             ! print *, 'Modifying xtra(5) ', flag_gyre
