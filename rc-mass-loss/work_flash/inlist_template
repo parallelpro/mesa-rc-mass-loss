@@ -145,11 +145,11 @@
 
       ! these are evolutionary step controls
       ! for seismic step controls see src/run_star_extras.f90
-      delta_lgTeff_hard_limit = 0.001
-      delta_lgL_limit_L_min = 0.01
-      delta_lgL_hard_limit = 0.006
-      delta_XH_cntr_hard_limit = 0.005d0
-      delta_XHe_cntr_hard_limit = 0.005d0
+      !delta_lgTeff_hard_limit = 0.001
+      !delta_lgL_limit_L_min = 0.01
+      !delta_lgL_hard_limit = 0.006
+      !delta_XH_cntr_hard_limit = 0.005d0
+      !delta_XHe_cntr_hard_limit = 0.005d0
 
 
    !# asteroseismology controls
@@ -175,14 +175,14 @@
    
       warn_when_large_rel_run_E_err = 99d0 !0.02d0
 
-      use_gold_tolerances = .true.
+      use_gold_tolerances = .false.
       
       convergence_ignore_equL_residuals = .true. ! needed during flash
       ! note: can get rid of this if turn on conv_vel's.  just takes more steps.
       ! use_dedt_form_of_energy_eqn = .true.
       energy_eqn_option = 'dedt'
 
-      varcontrol_target = 1d-4 !1d-3 in 1M_to_wd test suite !1d-4
+      varcontrol_target = 1d-3 !1d-3 in 1M_to_wd test suite !1d-4
       mesh_delta_coeff = 1.0
 
       
