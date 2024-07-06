@@ -1,0 +1,201 @@
+! *****************************************************
+!  p-mode asteroseismology for solor-like oscillators. 
+!  save pi modes and p modes.
+!  for mesa-r24.03.1 and gyre-7.1 (the version shipped with mesa)
+! *****************************************************
+
+&star_job
+
+   !# output
+
+      pgstar_flag = .false.
+      save_model_when_terminate = .true.
+      save_model_filename = '{save_model_filename}'
+      save_photo_when_terminate = .true.
+      show_log_description_at_start = .false.
+      history_columns_file = 'history_columns.list'
+      profile_columns_file = 'profile_columns.list'
+
+   !# starting model
+
+      load_saved_model = .true.
+      load_model_filename = 'start.mod' !change this
+
+      ! load_saved_model = .false.
+      ! create_pre_main_sequence_model = .true.
+      ! pre_ms_T_c = 9e5!7e5
+
+   !# modifications to model
+
+      set_uniform_initial_composition = .false.
+      initial_zfracs = 6 ! GS98_zfracs = 3,  AGSS09_zfracs = 6
+      
+      set_initial_model_number = .true.
+      initial_model_number = 0
+
+   !# nuclear reactions
+
+        !### set_rates_preference
+        !### new_rates_preference
+
+         ! + 1 = NACRE rates
+         ! + 2 = jina reaclib rates
+
+      !set_rates_preference = .true.
+      !new_rates_preference = 2
+      change_net = .true.
+      new_net_name = 'pp_and_cno_extras.net'  ! 
+      
+    !# misc 
+    num_steps_for_garbage_collection = 0 !for artemis cluster
+    
+/ ! end of star_job namelist
+
+
+&eos
+
+/ ! end of eos namelist
+
+
+&kap
+      Zbase =  {initial_z}
+      kap_file_prefix = 'a09' !'gs98' 
+      kap_lowT_prefix = 'lowT_fa05_a09p' ! 'lowT_fa05_gs98' 
+      kap_CO_prefix = 'a09_co' ! 'gs98_co' 
+      use_Type2_opacities = .true.
+
+/ ! end of kap namelist
+
+
+&controls
+
+   !# specifications for starting model
+
+      initial_mass = {initial_mass}
+      initial_z = {initial_z}
+      initial_y = {initial_y}   ! (< 0 means use default which is 0.24 + 2*initial_z)
+
+   !# mixing parameters
+
+      mixing_length_alpha = {mixing_length_alpha} !change this
+      use_Ledoux_criterion = .false.
+      MLT_option = 'Henyey'
+
+   !## overshooting
+      do_conv_premix = .true.
+      overshoot_scheme(1) = 'exponential'  ! Possible values: exponential, step
+      overshoot_zone_type(1) = 'any'  ! Possible values: burn_H, burn_He, burn_Z, nonburn, any
+      overshoot_zone_loc(1) = 'core'  ! Possible values: core, shell, any
+      overshoot_bdy_loc(1) = 'any'  ! Possible values: bottom, top, any
+      overshoot_f(1) = {overshoot_f} 
+      overshoot_f0(1) = {overshoot_f0} 
+
+
+      overshoot_scheme(2) = 'exponential'  ! Possible values: exponential, step
+      overshoot_zone_type(2) = 'any'  ! Possible values: burn_H, burn_He, burn_Z, nonburn, any
+      overshoot_zone_loc(2) = 'shell' ! Possible values: core, shell, any
+      overshoot_bdy_loc(2) = 'any' ! Possible values: bottom, top, any
+      overshoot_f(2) = 0.0174
+      overshoot_f0(2) = 0.0087
+
+   !## diffusion
+
+      ! !show_diffusion_info = .true. ! terminal output for diffusion
+      ! !show_diffusion_substep_info = .true. ! terminal output for diffusion
+      do_element_diffusion = .false. ! determines whether or not we do diffusion
+
+
+   !## mass loss
+      ! cool_wind_RGB_scheme = 'Reimers'
+      ! RGB_to_AGB_wind_switch = 1d-4
+      ! Reimers_scaling_factor = {reimers_scaling_factor} 
+      ! Blocker_scaling_factor = 0.2d0
+
+      ! sc05 wind
+      ! use_other_wind = .true.
+      ! x_ctrl(1) = {sc_scaling_factor}
+      x_ctrl(1) = 0.
+
+   !# controls for output
+
+      star_history_name = '{star_history_name}'
+
+      terminal_interval = 100
+      write_header_frequency = 1
+      photo_interval = -1
+      history_interval = 1
+      write_profiles_flag = .false.
+      write_pulse_data_with_profile = .true.
+      pulse_data_format = 'FGONG'
+      add_atmosphere_to_pulse_data = .true.
+      profile_data_prefix = 'profile' !change this
+      profiles_index_name = 'profiles.index' !change this
+      profile_interval = 5
+      max_num_profile_models = 18000
+      add_double_points_to_pulse_data = .true.
+      keep_surface_point_for_pulse_data = .true.
+
+   !# when to stop
+
+      max_model_number = 50000
+      dt_years_for_steps_before_max_age = 1d6
+
+      xa_central_lower_limit_species(1) = 'he4'
+      xa_central_lower_limit(1) = 0.93
+
+   !# timestep controls
+
+      !min_timestep_limit = 1d-10 !1d-6
+      max_timestep = 3.15d15  ! in seconds.  max_timestep <= 0 means no upper limit.
+
+      ! these are evolutionary step controls
+      ! for seismic step controls see src/run_star_extras.f90
+      delta_lgTeff_hard_limit = 0.001
+      delta_lgL_limit_L_min = 0.01
+      delta_lgL_hard_limit = 0.006
+      delta_XH_cntr_hard_limit = 0.005d0
+      delta_XHe_cntr_hard_limit = 0.005d0
+
+
+   !# asteroseismology controls
+
+      get_delta_nu_from_scaled_solar = .false.
+      nu_max_sun = 3090d0
+      delta_nu_sun = 135.1d0
+      astero_Teff_sun = 5772d0
+      delta_Pg_mode_freq = 1
+
+      !# Brunt controls
+
+         calculate_Brunt_N2 = .true. 
+         num_cells_for_smooth_brunt_B = 0
+   
+   !# atm
+
+      atm_option = 'T_tau'
+      atm_T_tau_relation =  'Eddington'
+      atm_T_tau_opacity = 'varying' !'iterated'
+
+   !# miscellaneous controls
+   
+      warn_when_large_rel_run_E_err = 99d0 !0.02d0
+
+      use_gold_tolerances = .true.
+      
+      convergence_ignore_equL_residuals = .true. ! needed during flash
+      ! note: can get rid of this if turn on conv_vel's.  just takes more steps.
+      ! use_dedt_form_of_energy_eqn = .true.
+      energy_eqn_option = 'dedt'
+
+      varcontrol_target = 1d-3 !1d-3 in 1M_to_wd test suite !1d-4
+      mesh_delta_coeff = 1.0
+
+      
+/ ! end of controls namelist
+
+
+
+
+&pgstar
+   
+/ ! end of pgstar namelist
