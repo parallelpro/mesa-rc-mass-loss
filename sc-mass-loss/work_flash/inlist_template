@@ -108,7 +108,7 @@
    !## mass loss
       ! cool_wind_RGB_scheme = 'Reimers'
       ! RGB_to_AGB_wind_switch = 1d-4
-      ! Reimers_scaling_factor = {reimers_scaling_factor} 
+      ! Reimers_scaling_factor = 0.0d0
       ! Blocker_scaling_factor = 0.2d0
 
       ! sc05 wind
